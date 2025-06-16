@@ -1,18 +1,54 @@
 from rest_framework import serializers
+from .lang import MessageEnum
+from rest_framework.exceptions import ValidationError as DRFValidationError
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField()
+    username = serializers.CharField(
+        error_messages={
+            'required': MessageEnum.USERNAME_REQUIRED.value,
+            'blank': MessageEnum.USERNAME_REQUIRED.value
+        }
+    )
+    password = serializers.CharField(
+        error_messages={
+            'required': MessageEnum.PASSWORD_REQUIRED.value,
+            'blank': MessageEnum.PASSWORD_REQUIRED.value
+        }
+    )
+
+    def is_valid(self, raise_exception=False):
+        try:
+            return super().is_valid(raise_exception=raise_exception)
+        except DRFValidationError as exc:
+            from .service import api_response
+            response = api_response(
+                False,
+                400,
+                MessageEnum.LOGIN_FAILED.value,
+                exc.detail,
+                None
+            )
+            raise DRFValidationError(response)
 
     def validate(self, data):
-        if not data.get('username'):
-            raise serializers.ValidationError({'username': 'Username is required.'})
-        if not data.get('password'):
-            raise serializers.ValidationError({'password': 'Password is required.'})
         return data
 
 class LogoutSerializer(serializers.Serializer):
     token = serializers.CharField(required=False)
+
+    def is_valid(self, raise_exception=False):
+        try:
+            return super().is_valid(raise_exception=raise_exception)
+        except DRFValidationError as exc:
+            from .service import api_response
+            response = api_response(
+                False,
+                400,
+                MessageEnum.LOGOUT_FAILED.value,
+                exc.detail,
+                None
+            )
+            raise DRFValidationError(response)
 
     def validate(self, data):
         token = data.get('token')
@@ -23,5 +59,5 @@ class LogoutSerializer(serializers.Serializer):
                 token = auth_header.split(' ')[1]
                 data['token'] = token
         if not token:
-            raise serializers.ValidationError({'token': 'No token provided.'})
+            raise serializers.ValidationError({'token': MessageEnum.TOKEN_REQUIRED.value})
         return data

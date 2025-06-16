@@ -1,4 +1,5 @@
 from django.conf import settings
+from rest_framework.response import Response
 import requests
 
 
@@ -27,3 +28,12 @@ def revoke_token(token, request):
     }
     response = requests.post(revoke_url, data=payload)
     return response
+
+def api_response(status_bool, status_code, message, error=None, data=None):
+    return {
+        'status': status_bool,
+        'statusCode': status_code,
+        'message': message,
+        'error': error,
+        'data': data
+    }
