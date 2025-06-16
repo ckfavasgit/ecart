@@ -5,13 +5,17 @@ from authentication.lang import MessageEnum
 class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'description']
+        fields = ['id', 'name', 'price', 'description', 'stock_quantity']
 
 class ProductDetailSerializer(serializers.ModelSerializer):
+    stock_quantity = serializers.IntegerField(min_value=0, error_messages={
+        'min_value': 'Stock quantity must be zero or positive.'
+    })
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'description']
+        fields = ['id', 'name', 'price', 'description', 'stock_quantity']
 
-    def validate(self, data):
-        # Example: you can add custom validation here if needed
-        return data
+    def validate_stock_quantity(self, value):
+        if value < 0:
+            raise serializers.ValidationError('Stock quantity must be zero or positive.')
+        return value
