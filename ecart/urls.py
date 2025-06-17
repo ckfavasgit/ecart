@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # OAuth2 endpoints
     path('auth/', include('authentication.urls')),  # Custom login/logout endpoints
-    path('products', include('products.urls')),  # Product list and detail APIs
+    path('products/', include('products.urls')),  # Product list and detail APIs
+    path('cart/', include('cart.urls')),  # Cart APIs
 ]
