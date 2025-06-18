@@ -22,3 +22,6 @@ class MessageEnum(Enum):
     QUANTITY_MIN_VALUE = 'Quantity must be at least 1.'
     ADD_TO_CART_FAILED = 'Failed to add product to cart.'
     EDIT_CART_FAILED = 'Failed to update cart.'
+    INCREMENT_CART_SUCCESS = 'Cart item incremented successfully.'
+    DECREMENT_CART_SUCCESS = 'Cart item decremented successfully.'
+    DECREMENT_CART_FAILED = 'Cannot decrement cart item below 1.'

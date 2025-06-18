@@ -18,20 +18,29 @@ def add_to_cart(user, product_id, quantity):
     product.save()
     return cart_item
 
-def edit_cart(user, cart_id, quantity):
+def increment_cart(user, cart_id):
     cart_item = get_object_or_404(Cart, id=cart_id, user=user)
     product = cart_item.product
-    # Check if enough stock is available (considering current cart quantity)
-    available_stock = product.stock_quantity + cart_item.quantity
-    if quantity > available_stock:
+    if product.stock_quantity < 1:
         from authentication.lang import MessageEnum
         from rest_framework.exceptions import ValidationError
         raise ValidationError({'quantity': MessageEnum.INSUFFICIENT_STOCK.value})
-    # Calculate the difference and update stock
-    diff = quantity - cart_item.quantity
-    cart_item.quantity = quantity
+    cart_item.quantity += 1
     cart_item.save()
-    product.stock_quantity -= diff
+    product.stock_quantity -= 1
+    product.save()
+    return cart_item
+
+def decrement_cart(user, cart_id):
+    cart_item = get_object_or_404(Cart, id=cart_id, user=user)
+    product = cart_item.product
+    if cart_item.quantity <= 1:
+        from authentication.lang import MessageEnum
+        from rest_framework.exceptions import ValidationError
+        raise ValidationError({'quantity': MessageEnum.DECREMENT_CART_FAILED.value})
+    cart_item.quantity -= 1
+    cart_item.save()
+    product.stock_quantity += 1
     product.save()
     return cart_item
 
