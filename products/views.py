@@ -10,7 +10,8 @@ from authentication.lang import MessageEnum
 class ProductListAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        products = get_all_products()
+        keyword = request.query_params.get('keyword')
+        products = get_all_products(keyword=keyword)
         serializer = ProductListSerializer(products, many=True)
         return Response(api_response(True, 200, MessageEnum.PRODUCT_LIST_SUCCESS.value, None, serializer.data), status=200)
 

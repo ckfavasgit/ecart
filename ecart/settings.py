@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',  # Added for CORS
     'authentication',
     'rest_framework',
     'products',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Added for CORS (should be at the top)
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -147,3 +149,7 @@ REST_FRAMEWORK = {
 
 OAUTH2_CLIENT_ID = os.getenv('OAUTH_CLIENT_ID')
 OAUTH2_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]

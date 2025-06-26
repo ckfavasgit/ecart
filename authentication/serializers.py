@@ -21,11 +21,17 @@ class LoginSerializer(serializers.Serializer):
             return super().is_valid(raise_exception=raise_exception)
         except DRFValidationError as exc:
             from .service import api_response
+            # Always return both username and password errors if both are missing
+            error_dict = exc.detail
+            if 'username' not in error_dict:
+                error_dict['username'] = []
+            if 'password' not in error_dict:
+                error_dict['password'] = []
             response = api_response(
                 False,
                 400,
                 MessageEnum.LOGIN_FAILED.value,
-                exc.detail,
+                error_dict,
                 None
             )
             raise DRFValidationError(response)
