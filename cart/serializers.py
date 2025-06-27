@@ -6,9 +6,10 @@ from rest_framework.exceptions import ValidationError as DRFValidationError
 
 class CartListSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
+    product_image = serializers.ImageField(source='product.image', read_only=True)
     class Meta:
         model = Cart
-        fields = ['id', 'product', 'product_name', 'quantity']
+        fields = ['id', 'product', 'product_name', 'product_image', 'quantity']
 
 class AddToCartSerializer(serializers.Serializer):
     product = serializers.IntegerField(
