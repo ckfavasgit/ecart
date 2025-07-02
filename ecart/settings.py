@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'products',
     'cart',
     'oauth2_provider',  # Added for OAuth2 support
+    'chatbot',  # Added chatbot app
+    # 'chatbot',  # Removed chatbot app
 ]
 
 MIDDLEWARE = [
@@ -150,9 +152,12 @@ REST_FRAMEWORK = {
 OAUTH2_CLIENT_ID = os.getenv('OAUTH_CLIENT_ID')
 OAUTH2_CLIENT_SECRET = os.getenv('OAUTH_CLIENT_SECRET')
 
+HUGGINGFACE_API_TOKEN = os.getenv('HUGGINGFACE_API_TOKEN')
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')

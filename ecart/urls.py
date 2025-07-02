@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),  # Custom login/logout endpoints
     path('products/', include('products.urls')),  # Product list and detail APIs
     path('cart/', include('cart.urls')),  # Cart APIs
+    path('api/', include('chatbot.urls')),  # Chatbot API
 ]
 
 if settings.DEBUG:
